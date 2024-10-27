@@ -1,6 +1,6 @@
-import 'package:trabalho_mobile/entity/base_entity.dart';
-import 'package:trabalho_mobile/entity/person.dart';
-import 'package:trabalho_mobile/entity/object.dart';
+import 'package:trabalho_mobile/entities/base_entity.dart';
+import 'package:trabalho_mobile/entities/person.dart';
+import 'package:trabalho_mobile/entities/object.dart';
 
 class User extends BaseEntity {
   Person person;

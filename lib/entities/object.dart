@@ -1,4 +1,4 @@
-import 'package:trabalho_mobile/entity/base_entity.dart';
+import 'package:trabalho_mobile/entities/base_entity.dart';
 
 class Object extends BaseEntity {
   String name;
