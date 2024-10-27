@@ -1,7 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:trabalho_mobile/entities/user.dart';
+import 'package:trabalho_mobile/logic/repository.dart';
 import 'package:trabalho_mobile/themes/theme.dart';
+import 'package:trabalho_mobile/pages/object_list_page.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void handleLogin(String email, String password) {
+    User? user = Repository.findByEmailAndPassword(email, password);
+
+    if (user != null) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => ObjectListPage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Email ou senha inválidos.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -14,7 +41,7 @@ class LoginPage extends StatelessWidget {
             Icon(
               Icons.crop_square,
               size: 148,
-              color: Theme.of(context).colorScheme.primary,
+              color: theme.colorScheme.primary,
             ),
             const SizedBox(height: 32.0),
             Text(
@@ -23,6 +50,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 48.0),
             TextField(
+              controller: emailController,
               style: theme.textTheme.bodyMedium,
               decoration: const InputDecoration(
                 labelText: 'Email',
@@ -31,6 +59,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             TextField(
+              controller: passwordController,
               style: theme.textTheme.bodyMedium,
               decoration: const InputDecoration(
                 labelText: 'Senha',
@@ -49,10 +78,12 @@ class LoginPage extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
-                child: Text(
+                onPressed: () {
+                  handleLogin(emailController.text, passwordController.text);
+                },
+                child: const Text(
                   'Login',
-                  style: const TextStyle(color: AppTheme.neutralLightest),
+                  style: TextStyle(color: AppTheme.neutralLightest),
                 ),
               ),
             ),
