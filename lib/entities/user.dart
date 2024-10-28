@@ -14,4 +14,12 @@ class User extends BaseEntity {
     required this.password,
     required this.objects,
   });
+
+  void addObject(Object object) {
+    objects.add(object);
+  }
+
+  void removeUser(int id) {
+    objects.removeWhere((object) => object.id == id);
+  }
 }
