@@ -33,6 +33,17 @@ class Group extends BaseEntity {
     return null;
   }
 
+  User? findByEmail(String email) {
+    for (User user in users) {
+      if (user.email == email) {
+        return user;
+      }
+    }
+
+    return null;
+  }
+  
+  
   User? findByEmailAndPassword(String email, String password) {
     for (User user in users) {
       if (user.email == email && user.password == password) {

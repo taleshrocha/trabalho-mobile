@@ -13,8 +13,7 @@ class Repository {
         objects: [
           Object(
               name: 'The Elder Scrolls V',
-              description:
-              'Atenção: não apague o save de 100 horas! Cada escolha conta na sua aventura épica.'),
+              description: 'Atenção: não apague o save de 100 horas! Cada escolha conta na sua aventura épica.'),
         ],
       ),
       User(
@@ -24,12 +23,10 @@ class Repository {
         objects: [
           Object(
               name: '1984',
-              description:
-              'Cuidado com a capa: está um pouco desgastada, mas a leitura é imperdível!'),
+              description: 'Cuidado com a capa: está um pouco desgastada, mas a leitura é imperdível!'),
           Object(
               name: 'Playstation 2',
-              description:
-              'Inclui dois controles e uma seleção de jogos clássicos para horas de diversão.'),
+              description: 'Inclui dois controles e uma seleção de jogos clássicos para horas de diversão.'),
         ],
       ),
       User(
@@ -39,12 +36,10 @@ class Repository {
         objects: [
           Object(
               name: 'Naruto: Volume 1',
-              description:
-              'Uma introdução emocionante ao mundo dos ninjas. Imperdível para fãs de anime!'),
+              description: 'Uma introdução emocionante ao mundo dos ninjas. Imperdível para fãs de anime!'),
           Object(
               name: 'Caixa de som JBL',
-              description:
-              'Ótima qualidade de som para suas playlists, perfeita para qualquer ocasião.'),
+              description: 'Ótima qualidade de som para suas playlists, perfeita para qualquer ocasião.'),
         ],
       ),
     ]);
