@@ -1,21 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:trabalho_mobile/entities/group.dart';
 import 'package:trabalho_mobile/entities/user.dart';
-import 'package:trabalho_mobile/logic/repository.dart';
+import 'package:trabalho_mobile/themes/theme.dart';
 
-class ObjectListPage extends StatelessWidget {
-  final List<User> users = Repository.getUsers();
+class ObjectListPage extends StatefulWidget {
+  final Group userGroup;
+  final User loggedUser;
 
-  ObjectListPage({super.key});
+  ObjectListPage(
+      {super.key, required this.userGroup, required this.loggedUser});
 
+  @override
+  _ObjectListPageState createState() => _ObjectListPageState();
+}
+
+class _ObjectListPageState extends State<ObjectListPage> {
   void handleLogin() {}
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text("Listagem Obj"),
-      ),
-    );
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Objetos",
+            style: AppTheme.textTheme.headlineSmall,
+          ),
+        ),
+        body: Text(widget.loggedUser.person.name));
   }
 }

@@ -6,4 +6,10 @@ class Person extends BaseEntity {
   Person({
     required this.name,
   });
+
+  String getInitials() {
+    List<String> tokens = name.split(' ');
+    String initials = tokens.map((name) => name[0]).take(2).join();
+    return initials.toUpperCase();
+  }
 }
