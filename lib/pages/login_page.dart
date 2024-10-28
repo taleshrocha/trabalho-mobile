@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.connect_without_contact_rounded,
+                  Icons.crop_square,
                   size: 148,
                   color: theme.colorScheme.primary,
                 ),
