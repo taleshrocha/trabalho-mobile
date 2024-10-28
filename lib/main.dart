@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Collectiva',
       theme: AppTheme.lightTheme,
+      debugShowCheckedModeBanner: false,
       home: LoginPage(userGroup: mainGroup),
     );
   }

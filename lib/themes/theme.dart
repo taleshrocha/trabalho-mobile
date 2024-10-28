@@ -10,6 +10,7 @@ class AppTheme {
   static const double xl3 = 86.0;
 
   static const highlightDarkest = Color(0xFF006FFD);
+  static const highlightDark = Color(0xFF2897FF);
   static const neutralLightest = Color(0xFFFFFFFF);
   static const neutralDarkest = Color(0xFFC5C6CC);
 
