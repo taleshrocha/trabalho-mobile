@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:trabalho_mobile/components/remove_dialog.dart';
 import 'package:trabalho_mobile/entities/object.dart';
 import '../entities/user.dart';
 import '../themes/theme.dart';
@@ -17,19 +18,53 @@ class ObjectDetailsPage extends StatefulWidget {
   });
 
   @override
-  _ObjectDetailsPageState createState() => _ObjectDetailsPageState();
+  ObjectDetailsPageState createState() => ObjectDetailsPageState();
 }
 
-class _ObjectDetailsPageState extends State<ObjectDetailsPage> {
+class ObjectDetailsPageState extends State<ObjectDetailsPage> {
   int _currCarouselIndex = 0;
-  final CarouselSliderController _carouselController = CarouselSliderController();
+  final CarouselSliderController _carouselController =
+      CarouselSliderController();
+
+  void _showRemoveObjectDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return RemoveDialog(
+          title: 'Excluir Objeto',
+          subTitle: 'Deseja realmente excluir o objeto selecionado?',
+          handleRemove: () {
+            Navigator.of(context).pop();
+            setState(() {
+              widget.removeObject(widget.currObject);
+              Navigator.of(context).pop();
+            });
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     bool isObjectOwner = widget.currUser.isObjectOwner(widget.currObject.id);
+
+    ButtonStyle removeButtonStyle = ButtonStyle(
+      backgroundColor:
+          WidgetStateProperty.all<Color>(AppTheme.supportErrorDark),
+      foregroundColor: WidgetStateProperty.all<Color>(AppTheme.neutralLightest),
+      padding: WidgetStateProperty.all<EdgeInsets>(
+          const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    );
+
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+        body: SingleChildScrollView(
+            child: Column(
           children: [
             Stack(
               children: [
@@ -77,9 +112,10 @@ class _ObjectDetailsPageState extends State<ObjectDetailsPage> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        icon: const Icon(Icons.close, size: 15,)
-                    )
-                ),
+                        icon: const Icon(
+                          Icons.close,
+                          size: 15,
+                        ))),
                 Positioned(
                   bottom: 10.0,
                   left: 0,
@@ -96,8 +132,8 @@ class _ObjectDetailsPageState extends State<ObjectDetailsPage> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: _currCarouselIndex == index
-                                ? Colors.blueAccent // Active color
-                                : Colors.grey, // Inactive color
+                                ? Colors.blueAccent
+                                : Colors.grey,
                           ),
                         ),
                       );
@@ -134,34 +170,25 @@ class _ObjectDetailsPageState extends State<ObjectDetailsPage> {
               ),
             )
           ],
-        )
-      ),
-      floatingActionButtonLocation: isObjectOwner
-        ? FloatingActionButtonLocation.centerFloat
-        : null,
-      floatingActionButton: isObjectOwner
-        ? SizedBox(
-            height: 40,
-            width: 150,
-            child: FloatingActionButton(
-              onPressed: () {}, //excluir objeto
-              backgroundColor:  const Color(0xFFFF0000),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Text(
-                "Excluir",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFFFFFFFF),
-                  fontWeight: FontWeight.bold,
+        )),
+        floatingActionButtonLocation:
+            isObjectOwner ? FloatingActionButtonLocation.centerFloat : null,
+        floatingActionButton: isObjectOwner
+            ? TextButton(
+                onPressed: () {
+                  _showRemoveObjectDialog(context);
+                },
+                style: removeButtonStyle,
+                child: const Text(
+                  "Excluir",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFFFFFFFF),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ),
-          )
-        : null
-    );
+              )
+            : null);
   }
 
   Widget _buildPlaceholder() {

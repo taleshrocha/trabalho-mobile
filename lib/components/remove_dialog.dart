@@ -64,11 +64,11 @@ class RemoveDialog extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             TextButton(
-              child: const Text('Cancelar'),
               style: cancelButtonStyle,
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: const Text('Cancelar'),
             ),
           ],
         ),

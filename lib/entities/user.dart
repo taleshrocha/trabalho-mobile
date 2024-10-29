@@ -19,7 +19,7 @@ class User extends BaseEntity {
     objects.add(object);
   }
 
-  void removeUser(int id) {
+  void removeUserObject(int id) {
     objects.removeWhere((object) => object.id == id);
   }
 

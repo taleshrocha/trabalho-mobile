@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho_mobile/components/remove_dialog.dart';
 import 'package:trabalho_mobile/entities/group.dart';
 import 'package:trabalho_mobile/entities/user.dart';
 import 'package:trabalho_mobile/pages/object_details_page.dart';
@@ -11,29 +10,14 @@ class ObjectListPage extends StatefulWidget {
   final Group userGroup;
   final User loggedUser;
 
-  void _showRemoveObjectDialog(BuildContext context, num objectId) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return RemoveDialog(
-          title: 'Excluir Objeto',
-          subTitle: 'Deseja realmente excluir o objeto selecionado?',
-          handleRemove: () {
-            Navigator.of(context).pop();
-          },
-        );
-      },
-    );
-  }
-
-  ObjectListPage(
+  const ObjectListPage(
       {super.key, required this.userGroup, required this.loggedUser});
 
   @override
-  _ObjectListPageState createState() => _ObjectListPageState();
+  ObjectListPageState createState() => ObjectListPageState();
 }
 
-class _ObjectListPageState extends State<ObjectListPage> {
+class ObjectListPageState extends State<ObjectListPage> {
   void handleAddObject(Object object) {
     setState(() {
       widget.loggedUser.addObject(object);
@@ -42,7 +26,7 @@ class _ObjectListPageState extends State<ObjectListPage> {
 
   void handleRemoveObject(Object object) {
     setState(() {
-      widget.loggedUser.removeUser(object.id);
+      widget.loggedUser.removeUserObject(object.id);
     });
   }
 
@@ -170,7 +154,7 @@ class _ObjectListPageState extends State<ObjectListPage> {
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => AddObjectPage(addObject: handleAddObject)));
-        }, //adicionar objeto ao usuário logado
+        },
         mini: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(19.0),
