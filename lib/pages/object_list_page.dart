@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:trabalho_mobile/components/remove_dialog.dart';
 import 'package:trabalho_mobile/entities/group.dart';
 import 'package:trabalho_mobile/entities/user.dart';
+import 'package:trabalho_mobile/pages/object_details_page.dart';
+import 'package:trabalho_mobile/pages/add_object_page.dart';
 import 'package:trabalho_mobile/themes/theme.dart';
 import 'package:trabalho_mobile/entities/object.dart';
 
@@ -33,19 +35,22 @@ class ObjectListPage extends StatefulWidget {
 
 class _ObjectListPageState extends State<ObjectListPage> {
   void handleAddObject(Object object) {
-    widget.loggedUser.addObject(object);
-    setState(() {});
+    setState(() {
+      widget.loggedUser.addObject(object);
+    });
   }
 
   void handleRemoveObject(Object object) {
-    widget.loggedUser.objects.remove(object);
-    setState(() {});
+    setState(() {
+      widget.loggedUser.removeUser(object.id);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     List<Object> allObjects = widget.userGroup.getAllObjects();
-    allObjects.sort((a, b) => a.name.compareTo(b.name));
+    allObjects
+        .sort((a, b) => a.name.toUpperCase().compareTo(b.name.toUpperCase()));
 
     return Scaffold(
       appBar: AppBar(
@@ -59,36 +64,25 @@ class _ObjectListPageState extends State<ObjectListPage> {
         ),
         centerTitle: true,
         automaticallyImplyLeading: false,
-        flexibleSpace: Stack(
-          children: [
-            Positioned(
-              top: 12,
-              left: 15,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppTheme.highlightDark,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      widget.loggedUser.person.getInitials(),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF1F2024),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+        leading: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () {}, //Abrir menu lateral
+              child: CircleAvatar(
+                backgroundColor: AppTheme.highlightDark,
+                child: Text(
+                  widget.loggedUser.person.getInitials(),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF1F2024),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
       body: ListView.builder(
@@ -100,11 +94,16 @@ class _ObjectListPageState extends State<ObjectListPage> {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                      widget._showRemoveObjectDialog(
-                          context, allObjects[index].id);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ObjectDetailsPage(
+                                currObject: allObjects[index],
+                                currUser: widget.loggedUser,
+                                removeObject: handleRemoveObject,
+                              )));
                     }, //página com os detalhes do objeto
                     child: Container(
                       height: 100,
+                      color: Colors.transparent,
                       margin: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 15.0),
                       child: IntrinsicHeight(
@@ -168,7 +167,10 @@ class _ObjectListPageState extends State<ObjectListPage> {
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {}, //adicionar objeto ao usuário logado
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => AddObjectPage(addObject: handleAddObject)));
+        }, //adicionar objeto ao usuário logado
         mini: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(19.0),
