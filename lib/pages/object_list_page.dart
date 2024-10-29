@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho_mobile/entities/group.dart';
 import 'package:trabalho_mobile/entities/user.dart';
+import 'package:trabalho_mobile/pages/add_object_page.dart';
 import 'package:trabalho_mobile/themes/theme.dart';
 import 'package:trabalho_mobile/entities/object.dart';
 
@@ -8,14 +9,14 @@ class ObjectListPage extends StatefulWidget {
   final Group userGroup;
   final User loggedUser;
 
-  ObjectListPage({super.key, required this.userGroup, required this.loggedUser});
+  ObjectListPage(
+      {super.key, required this.userGroup, required this.loggedUser});
 
   @override
   _ObjectListPageState createState() => _ObjectListPageState();
 }
 
 class _ObjectListPageState extends State<ObjectListPage> {
-
   void handleAddObject(Object object) {
     widget.loggedUser.addObject(object);
     setState(() {});
@@ -86,7 +87,8 @@ class _ObjectListPageState extends State<ObjectListPage> {
                     onTap: () {}, //página com os detalhes do objeto
                     child: Container(
                       height: 100,
-                      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 15.0),
                       child: IntrinsicHeight(
                         child: Row(
                           children: [
@@ -97,39 +99,38 @@ class _ObjectListPageState extends State<ObjectListPage> {
                                 color: const Color(0xFFEAF2FF),
                                 borderRadius: BorderRadius.circular(16),
                               ),
-                              child: const Icon(
-                                Icons.image,
-                                size: 50,
-                                color: Color(0xFFB4DBFF)
-                              ),
+                              child: const Icon(Icons.image,
+                                  size: 50, color: Color(0xFFB4DBFF)),
                             ),
                             Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        allObjects[index].name,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xFF1F2024),
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        widget.userGroup.getObjectOwner(allObjects[index].id)!.person.name,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xFF71727A),
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ],
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    allObjects[index].name,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFF1F2024),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                )
-                            ),
+                                  Text(
+                                    widget.userGroup
+                                        .getObjectOwner(allObjects[index].id)!
+                                        .person
+                                        .name,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFF71727A),
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
                           ],
                         ),
                       ),
@@ -146,15 +147,22 @@ class _ObjectListPageState extends State<ObjectListPage> {
               ],
             );
           }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {}, //adicionar objeto ao usuário logado
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => AddObjectPage(addObject: handleAddObject)));
+        }, //adicionar objeto ao usuário logado
         mini: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(19.0),
         ),
-        backgroundColor:  const Color(0xFF006FFD),
-        child: const Icon(Icons.add, color: Color(0xFFFFFFFF),),
+        backgroundColor: const Color(0xFF006FFD),
+        child: const Icon(
+          Icons.add,
+          color: Color(0xFFFFFFFF),
+        ),
       ),
     );
   }

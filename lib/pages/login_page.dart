@@ -6,8 +6,6 @@ import 'package:trabalho_mobile/themes/theme.dart';
 import 'package:trabalho_mobile/pages/object_list_page.dart';
 import '../entities/person.dart';
 
-import '../entities/person.dart';
-
 class LoginPage extends StatefulWidget {
   final Group userGroup;
 
@@ -39,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     bool ishidden = true;
     ThemeData theme = Theme.of(context);
-    
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -73,19 +71,17 @@ class _LoginPageState extends State<LoginPage> {
                   style: theme.textTheme.bodyMedium,
                   obscureText: ishidden,
                   decoration: InputDecoration(
-                    labelText: 'Senha',
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          ishidden = !ishidden;
-                        });
-                      },
-                      child: Icon(
-                          color: Color.fromARGB(255, 114, 114, 114),
-                          ishidden ? Icons.visibility : Icons.visibility_off
-                      ),
-                    )
-                  ),
+                      labelText: 'Senha',
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            ishidden = !ishidden;
+                          });
+                        },
+                        child: Icon(
+                            color: Color.fromARGB(255, 114, 114, 114),
+                            ishidden ? Icons.visibility : Icons.visibility_off),
+                      )),
                 ),
                 const SizedBox(height: 16.0),
                 Align(
@@ -120,8 +116,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  SignupPage(addUser: widget.userGroup.addUser, findByEmail: widget.userGroup.findByEmail)));
+                              builder: (context) => SignupPage(
+                                  addUser: widget.userGroup.addUser,
+                                  findByEmail: widget.userGroup.findByEmail)));
                         }, //tela de criação
                         child: const Text('Crie uma aqui!'),
                       ),
