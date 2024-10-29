@@ -22,4 +22,13 @@ class User extends BaseEntity {
   void removeUser(int id) {
     objects.removeWhere((object) => object.id == id);
   }
+
+  bool isObjectOwner(int id) {
+    for (Object obj in objects) {
+      if (obj.id == id) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
