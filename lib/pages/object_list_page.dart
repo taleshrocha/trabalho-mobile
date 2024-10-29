@@ -10,14 +10,14 @@ class ObjectListPage extends StatefulWidget {
   final Group userGroup;
   final User loggedUser;
 
-  ObjectListPage(
+  const ObjectListPage(
       {super.key, required this.userGroup, required this.loggedUser});
 
   @override
-  _ObjectListPageState createState() => _ObjectListPageState();
+  ObjectListPageState createState() => ObjectListPageState();
 }
 
-class _ObjectListPageState extends State<ObjectListPage> {
+class ObjectListPageState extends State<ObjectListPage> {
   void handleAddObject(Object object) {
     setState(() {
       widget.loggedUser.addObject(object);
@@ -26,14 +26,15 @@ class _ObjectListPageState extends State<ObjectListPage> {
 
   void handleRemoveObject(Object object) {
     setState(() {
-      widget.loggedUser.removeUser(object.id);
+      widget.loggedUser.removeUserObject(object.id);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     List<Object> allObjects = widget.userGroup.getAllObjects();
-    allObjects.sort((a, b) => a.name.toUpperCase().compareTo(b.name.toUpperCase()));
+    allObjects
+        .sort((a, b) => a.name.toUpperCase().compareTo(b.name.toUpperCase()));
 
     return Scaffold(
       appBar: AppBar(
@@ -78,8 +79,7 @@ class _ObjectListPageState extends State<ObjectListPage> {
                   child: GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              ObjectDetailsPage(
+                          builder: (context) => ObjectDetailsPage(
                                 currObject: allObjects[index],
                                 currUser: widget.loggedUser,
                                 removeObject: handleRemoveObject,
@@ -154,7 +154,7 @@ class _ObjectListPageState extends State<ObjectListPage> {
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => AddObjectPage(addObject: handleAddObject)));
-        }, //adicionar objeto ao usuário logado
+        },
         mini: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(19.0),

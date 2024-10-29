@@ -62,7 +62,7 @@ class _AddObjectPageState extends State<AddObjectPage> {
               controller: objectNameController,
               style: theme.textTheme.bodyMedium,
               decoration: const InputDecoration(
-                labelText: 'Nome do objeto',
+                labelText: 'Digite aqui',
               ),
             ),
             const SizedBox(height: 20),
@@ -79,7 +79,7 @@ class _AddObjectPageState extends State<AddObjectPage> {
               controller: descriptionController,
               style: theme.textTheme.bodyMedium,
               decoration: const InputDecoration(
-                labelText: 'É um mouse pad bom! Confia',
+                labelText: 'Digite aqui',
               ),
             ),
             const SizedBox(height: 20),

@@ -13,6 +13,8 @@ class AppTheme {
   static const highlightDark = Color(0xFF2897FF);
   static const neutralLightest = Color(0xFFFFFFFF);
   static const neutralDarkest = Color(0xFFC5C6CC);
+  static const neutralDarkDarkest = Color(0xFF1E1E1E);
+  static const supportErrorDark = Color(0xFFED3241);
 
   static const textTheme = TextTheme(
     headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
@@ -24,8 +26,10 @@ class AppTheme {
   );
 
   static ThemeData lightTheme = ThemeData(
-    colorScheme: ColorScheme.fromSwatch()
-        .copyWith(primary: highlightDarkest, surface: neutralLightest),
+    colorScheme: ColorScheme.fromSwatch().copyWith(
+      primary: highlightDarkest,
+      surface: neutralLightest,
+    ),
     textTheme: textTheme,
     inputDecorationTheme: const InputDecorationTheme(
       border: OutlineInputBorder(
@@ -46,11 +50,11 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: highlightDarkest, // Primary color
+        backgroundColor: highlightDarkest,
         foregroundColor: neutralLightest,
-        padding: const EdgeInsets.symmetric(vertical: 16.0), // Vertical padding
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0), // Rounded corners
+          borderRadius: BorderRadius.circular(12.0),
         ),
       ),
     ),
