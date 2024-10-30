@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho_mobile/themes/theme.dart';
 import 'package:trabalho_mobile/entities/object.dart';
+import '../entities/group.dart';
+import '../entities/user.dart';
+import 'menu_lateral.dart';
 
 class AddObjectPage extends StatefulWidget {
   final void Function(Object) addObject;
+  final User loggedUser;
+  final Group userGroup;
 
-  const AddObjectPage({super.key, required this.addObject});
+  const AddObjectPage({
+    super.key,
+    required this.addObject,
+    required this.loggedUser,
+    required this.userGroup});
 
   @override
   State<AddObjectPage> createState() => _AddObjectPageState();
@@ -28,7 +37,42 @@ class _AddObjectPageState extends State<AddObjectPage> {
     ThemeData theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: Builder(
+              builder: (context) => GestureDetector(
+                onTap: () {
+                  Scaffold.of(context).openDrawer();
+                }, //Abrir menu lateral
+                child: CircleAvatar(
+                  backgroundColor: AppTheme.highlightDark,
+                  child: Text(
+                    widget.loggedUser.person.getInitials(),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF1F2024),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              )
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.close)
+          )
+        ],
+      ),
+      drawer: AppDrawer(loggedUser: widget.loggedUser, userGroup: widget.userGroup,),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: ListView(

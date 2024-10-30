@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho_mobile/entities/group.dart';
 import 'package:trabalho_mobile/entities/user.dart';
+import 'package:trabalho_mobile/pages/menu_lateral.dart';
 import 'package:trabalho_mobile/pages/object_details_page.dart';
 import 'package:trabalho_mobile/pages/add_object_page.dart';
 import 'package:trabalho_mobile/themes/theme.dart';
@@ -51,23 +52,28 @@ class _ObjectListPageState extends State<ObjectListPage> {
           padding: const EdgeInsets.all(15.0),
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () {}, //Abrir menu lateral
-              child: CircleAvatar(
-                backgroundColor: AppTheme.highlightDark,
-                child: Text(
-                  widget.loggedUser.person.getInitials(),
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF1F2024),
-                    fontWeight: FontWeight.bold,
+            child: Builder(
+              builder: (context) => GestureDetector(
+                onTap: () {
+                  Scaffold.of(context).openDrawer();
+                }, //Abrir menu lateral
+                child: CircleAvatar(
+                  backgroundColor: AppTheme.highlightDark,
+                  child: Text(
+                    widget.loggedUser.person.getInitials(),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF1F2024),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
+              )
             ),
           ),
         ),
       ),
+      drawer: AppDrawer(loggedUser: widget.loggedUser, userGroup: widget.userGroup,),
       body: ListView.builder(
           itemCount: allObjects.length,
           itemBuilder: (context, index) {
@@ -83,6 +89,7 @@ class _ObjectListPageState extends State<ObjectListPage> {
                                 currObject: allObjects[index],
                                 currUser: widget.loggedUser,
                                 removeObject: handleRemoveObject,
+                                userGroup: widget.userGroup,
                               )));
                     }, //página com os detalhes do objeto
                     child: Container(
@@ -153,7 +160,11 @@ class _ObjectListPageState extends State<ObjectListPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => AddObjectPage(addObject: handleAddObject)));
+              builder: (context) => AddObjectPage(
+                addObject: handleAddObject,
+                loggedUser: widget.loggedUser,
+                userGroup: widget.userGroup,
+              )));
         }, //adicionar objeto ao usuário logado
         mini: true,
         shape: RoundedRectangleBorder(
