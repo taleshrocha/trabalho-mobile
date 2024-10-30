@@ -12,7 +12,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final Group mainGroup;
-  MyApp({super.key, required this.mainGroup});
+  const MyApp({super.key, required this.mainGroup});
 
   @override
   Widget build(BuildContext context) {

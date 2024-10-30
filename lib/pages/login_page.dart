@@ -4,7 +4,6 @@ import 'package:trabalho_mobile/entities/user.dart';
 import 'package:trabalho_mobile/pages/signup_page.dart';
 import 'package:trabalho_mobile/themes/theme.dart';
 import 'package:trabalho_mobile/pages/object_list_page.dart';
-import '../entities/person.dart';
 
 class LoginPage extends StatefulWidget {
   final Group userGroup;
@@ -12,10 +11,10 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.userGroup});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   bool ishidden = true;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -79,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                           });
                         },
                         child: Icon(
-                            color: Color.fromARGB(255, 114, 114, 114),
+                            color: const Color.fromARGB(255, 114, 114, 114),
                             ishidden ? Icons.visibility : Icons.visibility_off),
                       )),
                 ),

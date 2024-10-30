@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho_mobile/entities/person.dart';
 import 'package:trabalho_mobile/entities/user.dart';
-import 'package:trabalho_mobile/logic/repository.dart';
 import 'package:trabalho_mobile/themes/theme.dart';
-import 'package:trabalho_mobile/pages/object_list_page.dart';
 
 class SignupPage extends StatefulWidget {
   final void Function(User) addUser;
@@ -141,7 +139,7 @@ class _SignupPageState extends State<SignupPage> {
                       });
                     },
                     child: Icon(
-                        color: Color.fromARGB(255, 114, 114, 114),
+                        color: const Color.fromARGB(255, 114, 114, 114),
                         _ishidden ? Icons.visibility : Icons.visibility_off),
                   )),
             ),
@@ -159,7 +157,7 @@ class _SignupPageState extends State<SignupPage> {
                       });
                     },
                     child: Icon(
-                        color: Color.fromARGB(255, 114, 114, 114),
+                        color: const Color.fromARGB(255, 114, 114, 114),
                         _ishidden ? Icons.visibility : Icons.visibility_off),
                   )),
             ),
