@@ -2,18 +2,22 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:trabalho_mobile/components/remove_dialog.dart';
 import 'package:trabalho_mobile/entities/object.dart';
+import '../entities/group.dart';
 import '../entities/user.dart';
 import '../themes/theme.dart';
+import 'menu_lateral.dart';
 
 class ObjectDetailsPage extends StatefulWidget {
-  final Object currObject;
   final User currUser;
+  final Group userGroup;
+  final Object currObject;
   final void Function(Object) removeObject;
 
   const ObjectDetailsPage({
     super.key,
     required this.currObject,
     required this.currUser,
+    required this.userGroup,
     required this.removeObject,
   });
 
@@ -63,8 +67,9 @@ class ObjectDetailsPageState extends State<ObjectDetailsPage> {
     );
 
     return Scaffold(
-        body: SingleChildScrollView(
-            child: Column(
+      drawer: AppDrawer(loggedUser: widget.currUser, userGroup: widget.userGroup,),
+      body: SingleChildScrollView(
+        child: Column(
           children: [
             Stack(
               children: [
@@ -88,20 +93,23 @@ class ObjectDetailsPageState extends State<ObjectDetailsPage> {
                   left: 15,
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () {}, //Abrir menu lateral
-                      child: CircleAvatar(
-                        radius: 14,
-                        backgroundColor: AppTheme.highlightDark,
-                        child: Text(
-                          widget.currUser.person.getInitials(),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF1F2024),
-                            fontWeight: FontWeight.bold,
+                    child: Builder(
+                      builder: (context) => GestureDetector(
+                        onTap: () {
+                          Scaffold.of(context).openDrawer();
+                        }, //Abrir menu lateral
+                        child: CircleAvatar(
+                          backgroundColor: AppTheme.highlightDark,
+                          child: Text(
+                            widget.currUser.person.getInitials(),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF1F2024),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
+                      )
                     ),
                   ),
                 ),
