@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trabalho_mobile/logic/repository.dart';
+import 'package:trabalho_mobile/pages/api_test_page.dart';
 import 'package:trabalho_mobile/pages/login_page.dart';
 import 'package:trabalho_mobile/themes/theme.dart';
-
+import 'package:trabalho_mobile/providers/event_provider.dart';
 import 'entities/group.dart';
 
 void main() {
@@ -16,11 +18,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Collectiva',
-      theme: AppTheme.lightTheme,
-      debugShowCheckedModeBanner: false,
-      home: LoginPage(userGroup: mainGroup),
+    return MultiProvider(
+      providers: [
+        Provider<Group>.value(value: mainGroup),
+        ChangeNotifierProvider(
+          create: (context) => EventProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Collectiva',
+        theme: AppTheme.lightTheme,
+        debugShowCheckedModeBanner: false,
+        home: ApiTestPage(userGroup: mainGroup),
+      ),
     );
   }
 }
