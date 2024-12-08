@@ -13,13 +13,29 @@ class EventProvider extends ChangeNotifier {
 
   final EventHttp eventHttp = EventHttp();
 
-  Future<void> fetchEvents() async {
+  Future<void> getEvents() async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
       _events = await eventHttp.getEvents();
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> createEvent(Event event) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      Event createdEvent = await eventHttp.createEvent(event);
+      _events.add(createdEvent);
     } catch (e) {
       _errorMessage = e.toString();
     } finally {

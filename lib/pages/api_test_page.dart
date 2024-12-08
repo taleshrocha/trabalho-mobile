@@ -24,6 +24,9 @@ class ApiTestPageState extends State<ApiTestPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+
   void handleLogin(String email, String password) {
     User? user = widget.userGroup.findByEmailAndPassword(email, password);
 
@@ -41,7 +44,29 @@ class ApiTestPageState extends State<ApiTestPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => context.read<EventProvider>().fetchEvents());
+    Future.microtask(() => context.read<EventProvider>().getEvents());
+  }
+
+  void _createEvent() {
+    String name = nameController.text;
+    String location = locationController.text;
+
+    if (name.isNotEmpty && location.isNotEmpty) {
+      Event newEvent = Event(name: name, location: location);
+      context.read<EventProvider>().createEvent(newEvent).then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Evento criado com sucesso!')),
+        );
+      }).catchError((e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao criar evento: $e')),
+        );
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Preencha todos os campos')),
+      );
+    }
   }
 
   @override
@@ -62,6 +87,34 @@ class ApiTestPageState extends State<ApiTestPage> {
                   color: theme.colorScheme.primary,
                 ),
                 const SizedBox(height: 32.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: nameController,
+                        decoration: InputDecoration(
+                          labelText: 'Nome do Evento',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 16.0),
+                      TextField(
+                        controller: locationController,
+                        decoration: InputDecoration(
+                          labelText: 'Local do Evento',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 16.0),
+                      ElevatedButton(
+                        onPressed: _createEvent,
+                        child: Text('Criar Evento'),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 32.0),
                 Consumer<EventProvider>(
                   builder: (context, eventProvider, child) {
                     if (eventProvider.isLoading) {
@@ -72,7 +125,6 @@ class ApiTestPageState extends State<ApiTestPage> {
                     } else if (eventProvider.events.isEmpty) {
                       return Text('Nenhum evento encontrado.');
                     } else {
-                      // Exibe os eventos com ListView
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: eventProvider.events.length,
@@ -87,79 +139,6 @@ class ApiTestPageState extends State<ApiTestPage> {
                     }
                   },
                 ),
-                // Text(
-                //   "Seja bem vindo!",
-                //   style: theme.textTheme.headlineMedium,
-                // ),
-                // const SizedBox(height: 48.0),
-                // TextField(
-                //   controller: emailController,
-                //   style: theme.textTheme.bodyMedium,
-                //   decoration: const InputDecoration(
-                //     labelText: 'Email',
-                //   ),
-                //   keyboardType: TextInputType.emailAddress,
-                // ),
-                // const SizedBox(height: 16.0),
-                // TextField(
-                //   controller: passwordController,
-                //   style: theme.textTheme.bodyMedium,
-                //   obscureText: ishidden,
-                //   decoration: InputDecoration(
-                //       labelText: 'Senha',
-                //       suffixIcon: GestureDetector(
-                //         onTap: () {
-                //           setState(() {
-                //             ishidden = !ishidden;
-                //           });
-                //         },
-                //         child: Icon(
-                //             color: const Color.fromARGB(255, 114, 114, 114),
-                //             ishidden ? Icons.visibility : Icons.visibility_off),
-                //       )),
-                // ),
-                // const SizedBox(height: 16.0),
-                // Align(
-                //   alignment: Alignment.centerLeft,
-                //   child: TextButton(
-                //     onPressed: () {}, //problema seu que não lembra da senha
-                //     child: const Text('Esqueceu a senha?'),
-                //   ),
-                // ),
-                // const SizedBox(height: 32.0),
-                // SizedBox(
-                //   width: double.infinity,
-                //   child: ElevatedButton(
-                //     onPressed: () {
-                //       handleLogin(
-                //           emailController.text, passwordController.text);
-                //     },
-                //     child: const Text(
-                //       'Login',
-                //       style: TextStyle(color: AppTheme.neutralLightest),
-                //     ),
-                //   ),
-                // ),
-                // const SizedBox(height: 20.0),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     const Expanded(
-                //       child: Text("Não tem conta? "),
-                //     ),
-                //     Expanded(
-                //       child: TextButton(
-                //         onPressed: () {
-                //           Navigator.of(context).push(MaterialPageRoute(
-                //               builder: (context) => SignupPage(
-                //                   addUser: widget.userGroup.addUser,
-                //                   findByEmail: widget.userGroup.findByEmail)));
-                //         }, //tela de criação
-                //         child: const Text('Crie uma aqui!'),
-                //       ),
-                //     ),
-                //   ],
-                // ),
               ],
             ),
           ),
