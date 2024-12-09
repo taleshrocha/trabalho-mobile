@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trabalho_mobile/providers/user_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,21 +16,26 @@ class _LoginPageState extends State<LoginPage> {
   late String senha;
   bool ishidden = true;
 
-  void handleLogin() {
+  void handleLogin() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      // if (user != null) {
-      //   Navigator.of(context).push(MaterialPageRoute(
-      //       builder: (context) =>
-      //           ObjectListPage(userGroup: widget.userGroup, loggedUser: user)));
-      // } else {
+      try {
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        var user = await userProvider.login(email, senha);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login bem-sucedido!')),
+        );
+
+        // Navegar para a página principal após o login
+        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
+      } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Email ou senha inválidos.')),
         );
-      // }
+      }
     }
-
   }
 
   @override
@@ -36,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
     ThemeData theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: Color(0xFF212121),
+      backgroundColor: const Color(0xFF212121),
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -72,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                             border: OutlineInputBorder(
                                 borderSide: BorderSide.none,
                                 borderRadius: BorderRadius.circular(5)),
-                            labelStyle: TextStyle(fontSize: 14)),
+                            labelStyle: const TextStyle(fontSize: 14)),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Campo obrigatório';
@@ -92,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                             border: OutlineInputBorder(
                                 borderSide: BorderSide.none,
                                 borderRadius: BorderRadius.circular(5)),
-                            labelStyle: TextStyle(fontSize: 14),
+                            labelStyle: const TextStyle(fontSize: 14),
                             suffixIcon: GestureDetector(
                               onTap: () {
                                 setState(() {
@@ -100,8 +107,11 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                               },
                               child: Icon(
-                                  color: const Color.fromARGB(255, 114, 114, 114),
-                                  ishidden ? Icons.visibility : Icons.visibility_off),
+                                  color:
+                                      const Color.fromARGB(255, 114, 114, 114),
+                                  ishidden
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
                             )),
                         obscureText: ishidden,
                         validator: (value) {
@@ -118,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: TextButton(
-                          onPressed: () {}, //problema seu que não lembra da senha
+                          onPressed: () {},
                           child: const Text('Esqueceu a senha?'),
                         ),
                       ),
@@ -126,9 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            handleLogin();
-                          },
+                          onPressed: handleLogin,
                           child: const Text(
                             'Login',
                           ),
@@ -143,16 +151,15 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           Expanded(
                             child: TextButton(
-                              onPressed: () {}, //tela de criação
+                              onPressed: () {},
                               child: const Text('Crie uma aqui!'),
                             ),
                           ),
                         ],
                       ),
                     ],
-                  )
+                  ),
                 ),
-
               ],
             ),
           ),

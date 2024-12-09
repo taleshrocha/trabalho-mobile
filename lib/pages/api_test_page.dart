@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:trabalho_mobile/entities/event_entity.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho_mobile/providers/event_provider.dart';
-import 'package:trabalho_mobile/entities/group.dart';
-import 'package:trabalho_mobile/pages/object_list_page.dart';
 import 'package:trabalho_mobile/http/event_http.dart';
 
 class ApiTestPage extends StatefulWidget {
-  final Group userGroup;
-
-  ApiTestPage({super.key, required this.userGroup});
+  ApiTestPage();
 
   @override
   ApiTestPageState createState() => ApiTestPageState();

@@ -4,8 +4,8 @@ import 'package:trabalho_mobile/pages/api_test_page.dart';
 import 'package:trabalho_mobile/pages/file_test_page.dart';
 import 'package:trabalho_mobile/pages/login_page.dart';
 import 'package:trabalho_mobile/providers/event_provider.dart';
-import 'package:trabalho_mobile/providers/file_provider.dart'; // Import your FileProvider
-import 'entities/group.dart';
+import 'package:trabalho_mobile/providers/file_provider.dart';
+import 'package:trabalho_mobile/providers/user_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => EventProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MaterialApp(
         title: 'Collectiva',

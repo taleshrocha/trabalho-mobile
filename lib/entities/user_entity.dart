@@ -1,13 +1,13 @@
 import 'package:trabalho_mobile/entities/person_entity.dart';
 
-class Event {
+class User {
   int? id;
   String? email;
   Person? person;
 
-  Event({this.id, this.email, this.person});
+  User({this.id, this.email, this.person});
 
-  Event.fromJson(Map<String, dynamic> json) {
+  User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     email = json['email'];
     person = Person.fromJson(json['person']);
