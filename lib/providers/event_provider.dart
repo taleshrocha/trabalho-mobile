@@ -43,4 +43,51 @@ class EventProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> deleteEvent(int eventId) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      await eventHttp.deleteEvent(eventId);
+      _events.removeWhere((event) => event.id == eventId);
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> filterEvents({
+    String? queryEvent,
+    String? name,
+    String? location,
+    String? category,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? description,
+  }) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _events = await eventHttp.filterEvents(
+        queryEvent: queryEvent,
+        name: name,
+        location: location,
+        category: category,
+        startDate: startDate,
+        endDate: endDate,
+        description: description,
+      );
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

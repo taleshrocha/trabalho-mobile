@@ -27,6 +27,15 @@ class ApiTestPageState extends State<ApiTestPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
 
+  // Filter controllers
+  final TextEditingController filterNameController = TextEditingController();
+  final TextEditingController filterLocationController =
+      TextEditingController();
+  final TextEditingController filterCategoryController =
+      TextEditingController();
+  final TextEditingController filterDescriptionController =
+      TextEditingController();
+
   void handleLogin(String email, String password) {
     User? user = widget.userGroup.findByEmailAndPassword(email, password);
 
@@ -67,6 +76,92 @@ class ApiTestPageState extends State<ApiTestPage> {
         const SnackBar(content: Text('Preencha todos os campos')),
       );
     }
+  }
+
+  void _deleteEvent(int eventId) {
+    context.read<EventProvider>().deleteEvent(eventId).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Evento removido com sucesso!')),
+      );
+    }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao remover evento: $e')),
+      );
+    });
+  }
+
+  // Open Filter Modal
+  void _openFilterModal() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: filterNameController,
+                decoration: InputDecoration(
+                  labelText: 'Nome do Evento',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              TextField(
+                controller: filterLocationController,
+                decoration: InputDecoration(
+                  labelText: 'Local do Evento',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              TextField(
+                controller: filterCategoryController,
+                decoration: InputDecoration(
+                  labelText: 'Categoria',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              TextField(
+                controller: filterDescriptionController,
+                decoration: InputDecoration(
+                  labelText: 'Descrição',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  context
+                      .read<EventProvider>()
+                      .filterEvents(
+                        queryEvent: null,
+                        name: filterNameController.text,
+                        location: filterLocationController.text,
+                        category: filterCategoryController.text,
+                        description: filterDescriptionController.text,
+                      )
+                      .then((_) {
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Eventos filtrados com sucesso!')),
+                    );
+                  }).catchError((e) {
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Erro ao filtrar eventos: $e')),
+                    );
+                  });
+                },
+                child: Text('Filtrar Eventos'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -115,6 +210,11 @@ class ApiTestPageState extends State<ApiTestPage> {
                   ),
                 ),
                 const SizedBox(height: 32.0),
+                ElevatedButton(
+                  onPressed: _openFilterModal,
+                  child: Text('Filtrar Eventos'),
+                ),
+                const SizedBox(height: 32.0),
                 Consumer<EventProvider>(
                   builder: (context, eventProvider, child) {
                     if (eventProvider.isLoading) {
@@ -133,6 +233,10 @@ class ApiTestPageState extends State<ApiTestPage> {
                           return ListTile(
                             title: Text(event.name ?? ''),
                             subtitle: Text(event.location ?? ''),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () => _deleteEvent(event.id!),
+                            ),
                           );
                         },
                       );
