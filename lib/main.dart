@@ -1,73 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trabalho_mobile/logic/repository.dart';
+import 'package:trabalho_mobile/pages/api_test_page.dart';
+import 'package:trabalho_mobile/pages/file_test_page.dart';
 import 'package:trabalho_mobile/pages/login_page.dart';
-import 'package:trabalho_mobile/utils/routes.dart';
+import 'package:trabalho_mobile/themes/theme.dart';
+import 'package:trabalho_mobile/providers/event_provider.dart';
+import 'package:trabalho_mobile/providers/file_provider.dart'; // Import your FileProvider
+import 'entities/group.dart';
 
 void main() {
-  // runApp(MultiProvider(
-  //   providers: const [],
-  //   child: const MyApp(),
-  // ));
-  runApp(const MyApp());
+  final Group mainGroup = Repository.initializeGroup();
+  runApp(MyApp(mainGroup: mainGroup));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Group mainGroup;
+  const MyApp({super.key, required this.mainGroup});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: CollectivaRoutes.LOGIN,
-      routes: {
-        CollectivaRoutes.LOGIN : (ctx) => const LoginPage()
-      },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    return MultiProvider(
+      providers: [
+        Provider<Group>.value(value: mainGroup),
+        ChangeNotifierProvider(create: (context) => EventProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Collectiva',
+        theme: AppTheme.lightTheme,
+        debugShowCheckedModeBanner: false,
+        home: FileTestPage(),
       ),
     );
   }
