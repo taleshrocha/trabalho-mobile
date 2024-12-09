@@ -1,36 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:trabalho_mobile/entities/group.dart';
-import 'package:trabalho_mobile/entities/user.dart';
-import 'package:trabalho_mobile/pages/signup_page.dart';
-import 'package:trabalho_mobile/themes/theme.dart';
-import 'package:trabalho_mobile/pages/object_list_page.dart';
 
 class LoginPage extends StatefulWidget {
-  final Group userGroup;
-
-  const LoginPage({super.key, required this.userGroup});
+  const LoginPage({super.key});
 
   @override
-  LoginPageState createState() => LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+
+  late String email;
+  late String senha;
   bool ishidden = true;
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
-  void handleLogin(String email, String password) {
-    User? user = widget.userGroup.findByEmailAndPassword(email, password);
+  void handleLogin() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
-    if (user != null) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              ObjectListPage(userGroup: widget.userGroup, loggedUser: user)));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email ou senha inválidos.')),
-      );
+      // if (user != null) {
+      //   Navigator.of(context).push(MaterialPageRoute(
+      //       builder: (context) =>
+      //           ObjectListPage(userGroup: widget.userGroup, loggedUser: user)));
+      // } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Email ou senha inválidos.')),
+        );
+      // }
     }
+
   }
 
   @override
@@ -38,6 +36,7 @@ class LoginPageState extends State<LoginPage> {
     ThemeData theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: Color(0xFF212121),
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -51,79 +50,109 @@ class LoginPageState extends State<LoginPage> {
                   color: theme.colorScheme.primary,
                 ),
                 const SizedBox(height: 32.0),
-                Text(
-                  "Seja bem vindo!",
-                  style: theme.textTheme.headlineMedium,
-                ),
-                const SizedBox(height: 48.0),
-                TextField(
-                  controller: emailController,
-                  style: theme.textTheme.bodyMedium,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 16.0),
-                TextField(
-                  controller: passwordController,
-                  style: theme.textTheme.bodyMedium,
-                  obscureText: ishidden,
-                  decoration: InputDecoration(
-                      labelText: 'Senha',
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            ishidden = !ishidden;
-                          });
-                        },
-                        child: Icon(
-                            color: const Color.fromARGB(255, 114, 114, 114),
-                            ishidden ? Icons.visibility : Icons.visibility_off),
-                      )),
-                ),
-                const SizedBox(height: 16.0),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () {}, //problema seu que não lembra da senha
-                    child: const Text('Esqueceu a senha?'),
-                  ),
-                ),
-                const SizedBox(height: 32.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      handleLogin(
-                          emailController.text, passwordController.text);
-                    },
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(color: AppTheme.neutralLightest),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20.0),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Expanded(
-                      child: Text("Não tem conta? "),
+                    Text(
+                      "Faça o login na sua conta do",
+                      style: theme.textTheme.headlineMedium,
                     ),
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => SignupPage(
-                                  addUser: widget.userGroup.addUser,
-                                  findByEmail: widget.userGroup.findByEmail)));
-                        }, //tela de criação
-                        child: const Text('Crie uma aqui!'),
-                      ),
-                    ),
+                    Text("Collectiva!!"),
                   ],
                 ),
+                const SizedBox(height: 48.0),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(
+                            labelText: 'Email',
+                            filled: true,
+                            fillColor: const Color(0x34FFFFFF),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(5)),
+                            labelStyle: TextStyle(fontSize: 14)),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          email = value ?? '';
+                        },
+                      ),
+                      const SizedBox(height: 16.0),
+                      TextFormField(
+                        decoration: InputDecoration(
+                            labelText: 'Senha',
+                            filled: true,
+                            fillColor: const Color(0x34FFFFFF),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(5)),
+                            labelStyle: TextStyle(fontSize: 14),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  ishidden = !ishidden;
+                                });
+                              },
+                              child: Icon(
+                                  color: const Color.fromARGB(255, 114, 114, 114),
+                                  ishidden ? Icons.visibility : Icons.visibility_off),
+                            )),
+                        obscureText: ishidden,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Campo obrigatório';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          senha = value ?? '';
+                        },
+                      ),
+                      const SizedBox(height: 16.0),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () {}, //problema seu que não lembra da senha
+                          child: const Text('Esqueceu a senha?'),
+                        ),
+                      ),
+                      const SizedBox(height: 32.0),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            handleLogin();
+                          },
+                          child: const Text(
+                            'Login',
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Expanded(
+                            child: Text("Não tem conta? "),
+                          ),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {}, //tela de criação
+                              child: const Text('Crie uma aqui!'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ),
+
               ],
             ),
           ),
