@@ -3,9 +3,6 @@ import 'package:trabalho_mobile/entities/event_entity.dart';
 import 'package:provider/provider.dart';
 import 'package:trabalho_mobile/providers/event_provider.dart';
 import 'package:trabalho_mobile/entities/group.dart';
-import 'package:trabalho_mobile/entities/user.dart';
-import 'package:trabalho_mobile/pages/signup_page.dart';
-import 'package:trabalho_mobile/themes/theme.dart';
 import 'package:trabalho_mobile/pages/object_list_page.dart';
 import 'package:trabalho_mobile/http/event_http.dart';
 
@@ -35,20 +32,6 @@ class ApiTestPageState extends State<ApiTestPage> {
       TextEditingController();
   final TextEditingController filterDescriptionController =
       TextEditingController();
-
-  void handleLogin(String email, String password) {
-    User? user = widget.userGroup.findByEmailAndPassword(email, password);
-
-    if (user != null) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              ObjectListPage(userGroup: widget.userGroup, loggedUser: user)));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email ou senha inválidos.')),
-      );
-    }
-  }
 
   @override
   void initState() {
